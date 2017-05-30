@@ -43,12 +43,12 @@ grid.openSet = sort(grid.openSet);
 
 let lastOpenSet, nextSpot;
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 5; i++) {
 	lastOpenSet = grid.openSet.length - 1;
 	nextSpot = grid.openSet[lastOpenSet];
 
 	current = grid.area[nextSpot.spot.x][nextSpot.spot.y];
-	if (i == 2) log(nextSpot);
+	if (i == 4) log(nextSpot);
 	//printf(grid.openSet);
 
 	current.close();
