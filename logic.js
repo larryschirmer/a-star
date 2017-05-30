@@ -15,7 +15,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Top
 	let topPoint = grid[point.r - 1][point.c];
-	if (point.r > 0) {
+	if (topPoint.set !== 'W' && topPoint.isStart !== true) {
 		if (topPoint.g == 0) {
 			topPoint = assignValues(topPoint, point_g);
 			list.push(topPoint);
@@ -24,7 +24,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Top Right
 	let topRightPoint = grid[point.r - 1][point.c + 1];
-	if (point.r > 0 && point.c < colAmt) {
+	if (topRightPoint.set !== 'W' && topRightPoint.isStart !== true) {
 		if (topRightPoint.g == 0) {
 			topRightPoint = assignValues(topRightPoint, point_g, 1.414);
 			list.push(topRightPoint);
@@ -33,7 +33,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Right
 	let rightPoint = grid[point.r][point.c + 1];
-	if (point.c < colAmt) {
+	if (rightPoint.set !== 'W' && rightPoint.isStart !== true) {
 		if (rightPoint.g == 0) {
 			rightPoint = assignValues(rightPoint, point_g);
 			list.push(rightPoint);
@@ -42,7 +42,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Bottom Right
 	let bottomRightPoint = grid[point.r + 1][point.c + 1];
-	if (point.r < rowAmt && point.c < colAmt) {
+	if (bottomRightPoint.set !== 'W' && bottomRightPoint.isStart !== true) {
 		if (bottomRightPoint.g == 0) {
 			bottomRightPoint = assignValues(bottomRightPoint, point_g, 1.414);
 			list.push(bottomRightPoint);
@@ -51,7 +51,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Bottom
 	let bottomPoint = grid[point.r + 1][point.c];
-	if (point.r < rowAmt) {
+	if (bottomPoint.set !== 'W' && bottomPoint.isStart !== true) {
 		if (bottomPoint.g == 0) {
 			bottomPoint = assignValues(bottomPoint, point_g);
 			list.push(bottomPoint);
@@ -60,7 +60,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Bottom Left
 	let bottomLeftPoint = grid[point.r + 1][point.c - 1];
-	if (point.r < rowAmt && point.c > 0) {
+	if (bottomLeftPoint.set !== 'W' && bottomLeftPoint.isStart !== true) {
 		if (bottomLeftPoint.g == 0) {
 			bottomLeftPoint = assignValues(bottomLeftPoint, point_g, 1.414);
 			list.push(bottomLeftPoint);
@@ -69,7 +69,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Left
 	let leftPoint = grid[point.r][point.c - 1];
-	if (point.c > 0) {
+	if (leftPoint.set !== 'W' && leftPoint.isStart !== true) {
 		if (leftPoint.g == 0) {
 			leftPoint = assignValues(leftPoint, point_g);
 			list.push(leftPoint);
@@ -78,7 +78,7 @@ let findNeighbors = (point, grid) => {
 
 	//Point to the Top Left
 	let topLeftPoint = grid[point.r - 1][point.c - 1];
-	if (point.r > 0 && point.c > 0) {
+	if (topLeftPoint.set !== 'W' && topLeftPoint.isStart !== true) {
 		if (topLeftPoint.g == 0) {
 			topLeftPoint = assignValues(topLeftPoint, point_g, 1.414);
 			list.push(topLeftPoint);

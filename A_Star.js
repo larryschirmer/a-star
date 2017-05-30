@@ -10,7 +10,7 @@ let start = {
 	c: 1,
 };
 let end = {
-	r: 3,
+	r: 1,
 	c: 7,
 };
 
@@ -43,7 +43,7 @@ grid.openSet = sort(grid.openSet);
 
 let lastOpenSet, nextSpot;
 
-let runTimes = 7;
+let runTimes = 6;
 
 for (let i = 0; i < runTimes; i++) {
 	lastOpenSet = grid.openSet.length - 1;

@@ -13,11 +13,16 @@ let printGrid = grid => {
 			//if (digitCount(set) == 2) set = `${set}   `;
 			//if (digitCount(set) == 3) set = `${set}  `;
 			//if (digitCount(set) == 4) set = `${set} `;
-			if (row[i].set == 'X') set = ` X `;
-			if (row[i].set == '') set = ` | `;
-			if (row[i].set == 'C') set = ` M `;
-			if (row[i].isStart) set = ' S ';
-			if (row[i].isEnd) set = ' E ';
+			if (row[i].set == 'X') set = `  X `;
+			if (row[i].set == '') set = `  | `;
+			if (row[i].set == 'C') set = `  M `;
+			//log(digitCount(row[i].x));
+			if (row[i].set == 'W' && digitCount(row[i].x) == 2) set = `${row[i].x}/${row[i].y}`;
+			if (row[i].set == 'W' && digitCount(row[i].x) == 1) set = ` ${row[i].x}/${row[i].y}`;
+
+			if (row[i].set !== 'W' && digitCount(row[i].y) > 1) set += ` `;
+			if (row[i].isStart) set = '  S ';
+			if (row[i].isEnd) set = '  E ';
 
 			cols += ` ${set} `;
 		}

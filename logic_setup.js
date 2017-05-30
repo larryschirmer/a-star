@@ -33,6 +33,15 @@ function Spot() {
 	};
 }
 
+let wallLogic = (i, j, rows, cols) => {
+	let truth = false;
+	if (i == 0) truth = true;
+	if (j == 0) truth = true;
+	if (i == rows - 1) truth = true;
+	if (j == cols - 1) truth = true;
+	return truth;
+};
+
 let makeGrid = ({ rows, cols, start, end }, node_obj) => {
 	let gridArray = Array.from(new Array(rows), (u, i) => {
 		return Array.from(new Array(cols), (u, j) => {
@@ -44,6 +53,13 @@ let makeGrid = ({ rows, cols, start, end }, node_obj) => {
 			nodeObject.end = end;
 			if (start.r == i && start.c == j) nodeObject.isStart = true;
 			if (end.r == i && end.c == j) nodeObject.isEnd = true;
+			if (wallLogic(i, j, rows, cols)) nodeObject.makeWall();
+			if (nodeObject.isStart == true && nodeObject.set == 'W') {
+				throw new TypeError('start cannot be a wall');
+			}
+			if (nodeObject.isEnd == true && nodeObject.set == 'W') {
+				throw new TypeError('end cannot be a wall');
+			}
 			return nodeObject;
 		});
 	});
