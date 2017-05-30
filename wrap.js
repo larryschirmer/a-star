@@ -58,6 +58,13 @@ let removeCurrent = array => {
 	return workingSet;
 };
 
+let isCurrentAtEnd = point => {
+	let currentXY = [point.x, point.y];
+	let endXY = [point.end.r, point.end.c];
+	let truth = currentXY[0] == endXY[0] && currentXY[1] == endXY[1] ? true : false;
+	return truth;
+};
+
 module.exports = {
 	row,
 	col,
@@ -69,4 +76,5 @@ module.exports = {
 	sort,
 	printf,
 	removeCurrent,
+	isCurrentAtEnd,
 };

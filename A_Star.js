@@ -1,4 +1,4 @@
-let { row, col, sort, roundTo, printf, removeCurrent } = require('./wrap');
+let { row, col, sort, roundTo, printf, removeCurrent, isCurrentAtEnd } = require('./wrap');
 let { log, printGrid } = require('./logging');
 let { Spot, makeGrid } = require('./logic_setup');
 let { findNeighbors, showNeighbors } = require('./logic');
@@ -43,18 +43,22 @@ grid.openSet = sort(grid.openSet);
 
 let lastOpenSet, nextSpot;
 
-for (let i = 0; i < 5; i++) {
+let runTimes = 7;
+
+for (let i = 0; i < runTimes; i++) {
 	lastOpenSet = grid.openSet.length - 1;
 	nextSpot = grid.openSet[lastOpenSet];
 
 	current = grid.area[nextSpot.spot.x][nextSpot.spot.y];
-	if (i == 4) log(nextSpot);
+
+	if (isCurrentAtEnd(current)) log('done!');
+	if (i == runTimes - 1) log(nextSpot);
 	//printf(grid.openSet);
 
 	current.close();
 	grid.openSet = removeCurrent(grid.openSet);
 
-	console.log(`current x/y: ${nextSpot.spot.x}/${nextSpot.spot.y}`);
+	if (i == runTimes - 1) console.log(`current x/y: ${nextSpot.spot.x}/${nextSpot.spot.y}`);
 
 	current.getNeighbors(grid.area);
 	//console.log(`grid.openSet.length (before): ${grid.openSet.length}`);
@@ -73,7 +77,7 @@ for (let i = 0; i < 5; i++) {
 	//console.log(`grid.openSet.length (after): ${grid.openSet.length}`);
 
 	grid.openSet = sort(grid.openSet);
-	printf(grid.openSet);
+	if (i == runTimes - 1) printf(grid.openSet);
 	//log(grid.openSet[grid.openSet.length - 1]);
 }
 
