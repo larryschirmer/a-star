@@ -1,16 +1,17 @@
-let { row, col } = require('./wrap');
+let { row, col, sort } = require('./wrap');
 let { log, printGrid } = require('./logging');
-let { findNeighbors, Spot, showNeighbors, makeGrid } = require('./logic');
+let { Spot, makeGrid } = require('./logic_setup');
+let { findNeighbors, showNeighbors } = require('./logic');
 
 const cols = 14, rows = 23;
-let openSet = [], closedSet = [];
+
 let start = {
-	r: 0,
-	c: 0,
+	r: 10,
+	c: 1,
 };
 let end = {
-	r: 14,
-	c: 12,
+	r: 3,
+	c: 7,
 };
 
 let grid_opts = {
@@ -21,22 +22,44 @@ let grid_opts = {
 };
 
 let grid = makeGrid(grid_opts, Spot);
-let current = grid[start.r][start.c];
+let current = grid.area[start.r][start.c];
+//current.open();
+current.getNeighbors(grid.area);
+current.neighbors.forEach(point => {
+	point.open();
+	grid.openSet = [
+		...grid.openSet,
+		{
+			f: point.f,
+			spot: point,
+		},
+	];
+});
 
-current.getNeighbors(grid);
+openSet = sort(grid.openSet);
 
+let lastOpenSet = grid.openSet.length - 1;
+let nextSpot = grid.openSet[lastOpenSet];
+
+log(nextSpot);
+
+//log(openSet);
+
+/*
 let nextSpot = showNeighbors(current.neighbors);
 
 current = grid[nextSpot.place.x][nextSpot.place.y];
+current.open();
 current.getNeighbors(grid);
 
 nextSpot = showNeighbors(current.neighbors);
 
-for (let i = 0; i < 11; i++) {
+for (let i = 0; i < 1; i++) {
 	current = grid[nextSpot.place.x][nextSpot.place.y];
+	current.open();
 	current.getNeighbors(grid);
 	nextSpot = showNeighbors(current.neighbors);
 }
-
-printGrid(grid);
+*/
+printGrid(grid.area);
 //printPath(map);

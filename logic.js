@@ -1,100 +1,91 @@
-let { roundTo } = require('./wrap');
+let { log, roundTo, heuristic } = require('./wrap');
+
+let assignValues = (newPoint, originalPoint, d = 1) => {
+	newPoint.g = d + originalPoint;
+	newPoint.h = heuristic(newPoint);
+	newPoint.f = newPoint.g + newPoint.h;
+	return newPoint;
+};
 
 let findNeighbors = (point, grid) => {
 	let rowAmt = grid.length - 1;
 	let colAmt = grid[0].length - 1;
 	let list = [];
+	let point_g = grid[point.r][point.c].g;
+
 	//Point to the Top
+	let topPoint = grid[point.r - 1][point.c];
 	if (point.r > 0) {
-		grid[point.r - 1][point.c].g = 1;
-		list.push(grid[point.r - 1][point.c]);
+		if (topPoint.g == 0) {
+			topPoint = assignValues(topPoint, point_g);
+		}
+		list.push(topPoint);
 	}
+
 	//Point to the Top Right
+	let topRightPoint = grid[point.r - 1][point.c + 1];
 	if (point.r > 0 && point.c < colAmt) {
-		grid[point.r - 1][point.c + 1].g = 1.414;
-		list.push(grid[point.r - 1][point.c + 1]);
+		if (topRightPoint.g == 0) {
+			topRightPoint = assignValues(topRightPoint, point_g, 1.414);
+		}
+		list.push(topRightPoint);
 	}
+
 	//Point to the Right
+	let rightPoint = grid[point.r][point.c + 1];
 	if (point.c < colAmt) {
-		grid[point.r][point.c + 1].g += 1;
-		list.push(grid[point.r][point.c + 1]);
+		if (rightPoint.g == 0) {
+			rightPoint = assignValues(rightPoint, point_g);
+		}
+		list.push(rightPoint);
 	}
+
 	//Point to the Bottom Right
+	let bottomRightPoint = grid[point.r + 1][point.c + 1];
 	if (point.r < rowAmt && point.c < colAmt) {
-		grid[point.r + 1][point.c + 1].g = 1.414;
-		list.push(grid[point.r + 1][point.c + 1]);
+		if (bottomRightPoint.g == 0) {
+			bottomRightPoint = assignValues(bottomRightPoint, point_g, 1.414);
+		}
+		list.push(bottomRightPoint);
 	}
+
 	//Point to the Bottom
+	let bottomPoint = grid[point.r + 1][point.c];
 	if (point.r < rowAmt) {
-		grid[point.r + 1][point.c].g = 1;
-		list.push(grid[point.r + 1][point.c]);
+		if (bottomPoint.g == 0) {
+			bottomPoint = assignValues(bottomPoint, point_g);
+		}
+		list.push(bottomPoint);
 	}
+
 	//Point to the Bottom Left
+	let bottomLeftPoint = grid[point.r + 1][point.c - 1];
 	if (point.r < rowAmt && point.c > 0) {
-		grid[point.r + 1][point.c - 1].g = 1.414;
-		list.push(grid[point.r + 1][point.c - 1]);
+		if (bottomLeftPoint.g == 0) {
+			bottomLeftPoint = assignValues(bottomLeftPoint, point_g, 1.414);
+		}
+		list.push(bottomLeftPoint);
 	}
+
 	//Point to the Left
+	let leftPoint = grid[point.r][point.c - 1];
 	if (point.c > 0) {
-		grid[point.r][point.c - 1].g = 1;
-		list.push(grid[point.r][point.c - 1]);
+		if (leftPoint.g == 0) {
+			leftPoint = assignValues(leftPoint, point_g);
+		}
+		list.push(leftPoint);
 	}
+
 	//Point to the Top Left
+	let topLeftPoint = grid[point.r - 1][point.c - 1];
 	if (point.r > 0 && point.c > 0) {
-		grid[point.r - 1][point.c - 1].g = 1.414;
+		if (topLeftPoint.g == 0) {
+			topLeftPoint = assignValues(topLeftPoint, point_g, 1.414);
+		}
 		list.push(grid[point.r - 1][point.c - 1]);
 	}
+
 	return list;
-};
-
-function Spot() {
-	this.f = 0;
-	this.g = 0;
-	this.h = 0;
-	this.x = 0;
-	this.y = 0;
-
-	this.rows = 0;
-	this.cols = 0;
-
-	this.end = {};
-
-	this.set = 'X   ';
-	this.open = _ => {
-		this.set = 'O   ';
-	};
-	this.isNeighbor = false;
-	this.neighbors = [];
-	this.getNeighbors = grid => {
-		let point = {
-			r: this.x,
-			c: this.y,
-		};
-		this.neighbors = findNeighbors(point, grid);
-	};
-}
-
-let makeGrid = ({ rows, cols, start, end }, node_obj) => {
-	return (gridArray = Array.from(new Array(rows), (u, i) => {
-		return Array.from(new Array(cols), (u, j) => {
-			let nodeObject = new node_obj();
-			nodeObject.x = i;
-			nodeObject.y = j;
-			nodeObject.rows = rows;
-			nodeObject.cols = cols;
-			nodeObject.end = end;
-			if (start.r == i && start.c == j) nodeObject.isStart = true;
-			if (end.r == i && end.c == j) nodeObject.isEnd = true;
-			return nodeObject;
-		});
-	}));
-};
-
-let heuristic = point => {
-	let a = point.x - point.end.r;
-	let b = point.y - point.end.c;
-	let c = Math.sqrt(a * a + b * b);
-	return c;
 };
 
 let showNeighbors = neighbors => {
@@ -124,7 +115,5 @@ let showNeighbors = neighbors => {
 
 module.exports = {
 	findNeighbors,
-	Spot,
 	showNeighbors,
-	makeGrid,
 };

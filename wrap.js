@@ -28,6 +28,21 @@ function makeSpace(num) {
 	return spaceArray.join('');
 }
 
+let heuristic = point => {
+	let a = point.x - point.end.r;
+	let b = point.y - point.end.c;
+	let c = Math.sqrt(a * a + b * b);
+	return c;
+};
+
+let sort = array => {
+	// sort by value
+	let newArray = array.sort(function(a, b) {
+		return a.f - b.f;
+	});
+	return newArray.reverse();
+};
+
 module.exports = {
 	row,
 	col,
@@ -35,4 +50,6 @@ module.exports = {
 	roundTo,
 	digitCount,
 	makeSpace,
+	heuristic,
+	sort,
 };
