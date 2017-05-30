@@ -32,7 +32,7 @@ let heuristic = point => {
 	let a = point.x - point.end.r;
 	let b = point.y - point.end.c;
 	let c = Math.sqrt(a * a + b * b);
-	return c * 0.5;
+	return c * 0.44;
 };
 
 let sort = array => {

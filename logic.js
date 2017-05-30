@@ -11,6 +11,21 @@ let assignValues = (newPoint, originalPoint, dir, d = 1) => {
 	return newPoint;
 };
 
+let makeMap = (map, grid, point) => {
+	if (point.isStart !== true) {
+		map = [...map, [point.x, point.y]];
+		let nextPoint = {
+			x: point.previous.x,
+			y: point.previous.y,
+		};
+		//log(map);
+		return makeMap(map, grid, grid[nextPoint.x][nextPoint.y]);
+	} else {
+		map = [...map, [point.x, point.y]];
+		return map.reverse();
+	}
+};
+
 let findNeighbors = (point, grid) => {
 	let rowAmt = grid.length - 1;
 	let colAmt = grid[0].length - 1;
@@ -128,4 +143,5 @@ let showNeighbors = neighbors => {
 module.exports = {
 	findNeighbors,
 	showNeighbors,
+	makeMap,
 };
