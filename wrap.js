@@ -43,6 +43,21 @@ let sort = array => {
 	return newArray.reverse();
 };
 
+let printf = array => {
+	array.forEach(point => {
+		console.log(`f: ${roundTo(point.f, 2)} x/y: ${point.spot.x}/${point.spot.y}`);
+	});
+};
+
+let removeCurrent = array => {
+	let workingSet = [];
+	let last = array.length - 1;
+	array.forEach((v, i) => {
+		if (i < last) workingSet = [...workingSet, v];
+	});
+	return workingSet;
+};
+
 module.exports = {
 	row,
 	col,
@@ -52,4 +67,6 @@ module.exports = {
 	makeSpace,
 	heuristic,
 	sort,
+	printf,
+	removeCurrent,
 };

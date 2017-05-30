@@ -1,4 +1,4 @@
-let { row, col, sort } = require('./wrap');
+let { row, col, sort, roundTo, printf, removeCurrent } = require('./wrap');
 let { log, printGrid } = require('./logging');
 let { Spot, makeGrid } = require('./logic_setup');
 let { findNeighbors, showNeighbors } = require('./logic');
@@ -22,9 +22,12 @@ let grid_opts = {
 };
 
 let grid = makeGrid(grid_opts, Spot);
+
+//One
 let current = grid.area[start.r][start.c];
-//current.open();
+
 current.getNeighbors(grid.area);
+
 current.neighbors.forEach(point => {
 	point.open();
 	grid.openSet = [
@@ -36,30 +39,43 @@ current.neighbors.forEach(point => {
 	];
 });
 
-openSet = sort(grid.openSet);
+grid.openSet = sort(grid.openSet);
 
-let lastOpenSet = grid.openSet.length - 1;
-let nextSpot = grid.openSet[lastOpenSet];
+let lastOpenSet, nextSpot;
 
-log(nextSpot);
+for (let i = 0; i < 3; i++) {
+	lastOpenSet = grid.openSet.length - 1;
+	nextSpot = grid.openSet[lastOpenSet];
 
-//log(openSet);
+	current = grid.area[nextSpot.spot.x][nextSpot.spot.y];
+	if (i == 2) log(nextSpot);
+	//printf(grid.openSet);
 
-/*
-let nextSpot = showNeighbors(current.neighbors);
+	current.close();
+	grid.openSet = removeCurrent(grid.openSet);
 
-current = grid[nextSpot.place.x][nextSpot.place.y];
-current.open();
-current.getNeighbors(grid);
+	console.log(`current x/y: ${nextSpot.spot.x}/${nextSpot.spot.y}`);
 
-nextSpot = showNeighbors(current.neighbors);
+	current.getNeighbors(grid.area);
+	//console.log(`grid.openSet.length (before): ${grid.openSet.length}`);
 
-for (let i = 0; i < 1; i++) {
-	current = grid[nextSpot.place.x][nextSpot.place.y];
-	current.open();
-	current.getNeighbors(grid);
-	nextSpot = showNeighbors(current.neighbors);
+	current.neighbors.forEach(point => {
+		point.open();
+		grid.openSet = [
+			...grid.openSet,
+			{
+				f: point.f,
+				spot: point,
+			},
+		];
+	});
+	//log(current.neighbors.length);
+	//console.log(`grid.openSet.length (after): ${grid.openSet.length}`);
+
+	grid.openSet = sort(grid.openSet);
+	printf(grid.openSet);
+	//log(grid.openSet[grid.openSet.length - 1]);
 }
-*/
+
 printGrid(grid.area);
 //printPath(map);

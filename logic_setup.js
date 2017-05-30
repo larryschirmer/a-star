@@ -19,6 +19,9 @@ function Spot() {
 	this.close = _ => {
 		this.set = 'C';
 	};
+	this.makeWall = _ => {
+		this.set = 'W';
+	};
 	this.isNeighbor = false;
 	this.neighbors = [];
 	this.getNeighbors = grid => {

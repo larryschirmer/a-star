@@ -18,8 +18,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r > 0) {
 		if (topPoint.g == 0) {
 			topPoint = assignValues(topPoint, point_g);
+			list.push(topPoint);
 		}
-		list.push(topPoint);
 	}
 
 	//Point to the Top Right
@@ -27,8 +27,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r > 0 && point.c < colAmt) {
 		if (topRightPoint.g == 0) {
 			topRightPoint = assignValues(topRightPoint, point_g, 1.414);
+			list.push(topRightPoint);
 		}
-		list.push(topRightPoint);
 	}
 
 	//Point to the Right
@@ -36,8 +36,8 @@ let findNeighbors = (point, grid) => {
 	if (point.c < colAmt) {
 		if (rightPoint.g == 0) {
 			rightPoint = assignValues(rightPoint, point_g);
+			list.push(rightPoint);
 		}
-		list.push(rightPoint);
 	}
 
 	//Point to the Bottom Right
@@ -45,8 +45,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r < rowAmt && point.c < colAmt) {
 		if (bottomRightPoint.g == 0) {
 			bottomRightPoint = assignValues(bottomRightPoint, point_g, 1.414);
+			list.push(bottomRightPoint);
 		}
-		list.push(bottomRightPoint);
 	}
 
 	//Point to the Bottom
@@ -54,8 +54,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r < rowAmt) {
 		if (bottomPoint.g == 0) {
 			bottomPoint = assignValues(bottomPoint, point_g);
+			list.push(bottomPoint);
 		}
-		list.push(bottomPoint);
 	}
 
 	//Point to the Bottom Left
@@ -63,8 +63,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r < rowAmt && point.c > 0) {
 		if (bottomLeftPoint.g == 0) {
 			bottomLeftPoint = assignValues(bottomLeftPoint, point_g, 1.414);
+			list.push(bottomLeftPoint);
 		}
-		list.push(bottomLeftPoint);
 	}
 
 	//Point to the Left
@@ -72,8 +72,8 @@ let findNeighbors = (point, grid) => {
 	if (point.c > 0) {
 		if (leftPoint.g == 0) {
 			leftPoint = assignValues(leftPoint, point_g);
+			list.push(leftPoint);
 		}
-		list.push(leftPoint);
 	}
 
 	//Point to the Top Left
@@ -81,8 +81,8 @@ let findNeighbors = (point, grid) => {
 	if (point.r > 0 && point.c > 0) {
 		if (topLeftPoint.g == 0) {
 			topLeftPoint = assignValues(topLeftPoint, point_g, 1.414);
+			list.push(topLeftPoint);
 		}
-		list.push(grid[point.r - 1][point.c - 1]);
 	}
 
 	return list;
