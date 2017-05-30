@@ -1,4 +1,5 @@
 let { findNeighbors } = require('./logic');
+let { log } = require('./logging');
 
 function Spot() {
 	this.f = 0;
@@ -10,7 +11,12 @@ function Spot() {
 	this.rows = 0;
 	this.cols = 0;
 
+	this.isStart = false;
+	this.isEnd = false;
+
 	this.end = {};
+
+	this.path = '';
 
 	this.set = '';
 	this.open = _ => {
@@ -31,6 +37,11 @@ function Spot() {
 		};
 		this.neighbors = findNeighbors(point, grid);
 	};
+	this.previous = {
+		x: 0,
+		y: 0,
+		dir: '',
+	};
 }
 
 let wallLogic = (i, j, rows, cols) => {
@@ -42,7 +53,7 @@ let wallLogic = (i, j, rows, cols) => {
 	return truth;
 };
 
-let makeGrid = ({ rows, cols, start, end }, node_obj) => {
+let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 	let gridArray = Array.from(new Array(rows), (u, i) => {
 		return Array.from(new Array(cols), (u, j) => {
 			let nodeObject = new node_obj();
@@ -64,6 +75,13 @@ let makeGrid = ({ rows, cols, start, end }, node_obj) => {
 		});
 	});
 	let openSet = [], closedSet = [];
+
+	for (let i = 0; i < walls.length; i++) {
+		let x = walls[i].x;
+		let y = walls[i].y;
+		gridArray[x][y].set = 'W';
+	}
+
 	return {
 		openSet: openSet,
 		closedSet: closedSet,

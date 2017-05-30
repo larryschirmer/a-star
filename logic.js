@@ -1,9 +1,13 @@
 let { log, roundTo, heuristic } = require('./wrap');
 
-let assignValues = (newPoint, originalPoint, d = 1) => {
-	newPoint.g = d * 0.9 + originalPoint;
+let assignValues = (newPoint, originalPoint, dir, d = 1) => {
+	newPoint.g = d * 0.9 + originalPoint.g;
 	newPoint.h = heuristic(newPoint);
 	newPoint.f = newPoint.g + newPoint.h;
+
+	newPoint.previous.x = originalPoint.x;
+	newPoint.previous.y = originalPoint.y;
+	newPoint.previous.dir = dir;
 	return newPoint;
 };
 
@@ -11,13 +15,14 @@ let findNeighbors = (point, grid) => {
 	let rowAmt = grid.length - 1;
 	let colAmt = grid[0].length - 1;
 	let list = [];
-	let point_g = grid[point.r][point.c].g;
+	let point_info = grid[point.r][point.c];
 
 	//Point to the Top
 	let topPoint = grid[point.r - 1][point.c];
 	if (topPoint.set !== 'W' && topPoint.isStart !== true) {
 		if (topPoint.g == 0) {
-			topPoint = assignValues(topPoint, point_g);
+			let dir = '|';
+			topPoint = assignValues(topPoint, point_info, dir);
 			list.push(topPoint);
 		}
 	}
@@ -26,7 +31,8 @@ let findNeighbors = (point, grid) => {
 	let topRightPoint = grid[point.r - 1][point.c + 1];
 	if (topRightPoint.set !== 'W' && topRightPoint.isStart !== true) {
 		if (topRightPoint.g == 0) {
-			topRightPoint = assignValues(topRightPoint, point_g, 1.414);
+			let dir = '/';
+			topRightPoint = assignValues(topRightPoint, point_info, dir, 1.414);
 			list.push(topRightPoint);
 		}
 	}
@@ -35,7 +41,8 @@ let findNeighbors = (point, grid) => {
 	let rightPoint = grid[point.r][point.c + 1];
 	if (rightPoint.set !== 'W' && rightPoint.isStart !== true) {
 		if (rightPoint.g == 0) {
-			rightPoint = assignValues(rightPoint, point_g);
+			let dir = '-';
+			rightPoint = assignValues(rightPoint, point_info, dir);
 			list.push(rightPoint);
 		}
 	}
@@ -44,7 +51,8 @@ let findNeighbors = (point, grid) => {
 	let bottomRightPoint = grid[point.r + 1][point.c + 1];
 	if (bottomRightPoint.set !== 'W' && bottomRightPoint.isStart !== true) {
 		if (bottomRightPoint.g == 0) {
-			bottomRightPoint = assignValues(bottomRightPoint, point_g, 1.414);
+			let dir = '\\';
+			bottomRightPoint = assignValues(bottomRightPoint, point_info, dir, 1.414);
 			list.push(bottomRightPoint);
 		}
 	}
@@ -53,7 +61,8 @@ let findNeighbors = (point, grid) => {
 	let bottomPoint = grid[point.r + 1][point.c];
 	if (bottomPoint.set !== 'W' && bottomPoint.isStart !== true) {
 		if (bottomPoint.g == 0) {
-			bottomPoint = assignValues(bottomPoint, point_g);
+			let dir = '|';
+			bottomPoint = assignValues(bottomPoint, point_info, dir);
 			list.push(bottomPoint);
 		}
 	}
@@ -62,7 +71,8 @@ let findNeighbors = (point, grid) => {
 	let bottomLeftPoint = grid[point.r + 1][point.c - 1];
 	if (bottomLeftPoint.set !== 'W' && bottomLeftPoint.isStart !== true) {
 		if (bottomLeftPoint.g == 0) {
-			bottomLeftPoint = assignValues(bottomLeftPoint, point_g, 1.414);
+			let dir = '/';
+			bottomLeftPoint = assignValues(bottomLeftPoint, point_info, dir, 1.414);
 			list.push(bottomLeftPoint);
 		}
 	}
@@ -71,7 +81,8 @@ let findNeighbors = (point, grid) => {
 	let leftPoint = grid[point.r][point.c - 1];
 	if (leftPoint.set !== 'W' && leftPoint.isStart !== true) {
 		if (leftPoint.g == 0) {
-			leftPoint = assignValues(leftPoint, point_g);
+			let dir = '-';
+			leftPoint = assignValues(leftPoint, point_info, dir);
 			list.push(leftPoint);
 		}
 	}
@@ -80,7 +91,8 @@ let findNeighbors = (point, grid) => {
 	let topLeftPoint = grid[point.r - 1][point.c - 1];
 	if (topLeftPoint.set !== 'W' && topLeftPoint.isStart !== true) {
 		if (topLeftPoint.g == 0) {
-			topLeftPoint = assignValues(topLeftPoint, point_g, 1.414);
+			let dir = '\\';
+			topLeftPoint = assignValues(topLeftPoint, point_info, dir, 1.414);
 			list.push(topLeftPoint);
 		}
 	}
