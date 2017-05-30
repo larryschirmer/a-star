@@ -3,7 +3,7 @@ let { log, printGrid } = require('./logging');
 let { Spot, makeGrid } = require('./logic_setup');
 let { findNeighbors, showNeighbors } = require('./logic');
 
-const cols = 14, rows = 23;
+const cols = 14, rows = 14;
 
 let start = {
 	r: 10,
@@ -43,7 +43,7 @@ grid.openSet = sort(grid.openSet);
 
 let lastOpenSet, nextSpot;
 
-let runTimes = 6;
+let runTimes = 9;
 
 for (let i = 0; i < runTimes; i++) {
 	lastOpenSet = grid.openSet.length - 1;
@@ -53,7 +53,6 @@ for (let i = 0; i < runTimes; i++) {
 
 	if (isCurrentAtEnd(current)) log('done!');
 	if (i == runTimes - 1) log(nextSpot);
-	//printf(grid.openSet);
 
 	current.close();
 	grid.openSet = removeCurrent(grid.openSet);
@@ -61,7 +60,6 @@ for (let i = 0; i < runTimes; i++) {
 	if (i == runTimes - 1) console.log(`current x/y: ${nextSpot.spot.x}/${nextSpot.spot.y}`);
 
 	current.getNeighbors(grid.area);
-	//console.log(`grid.openSet.length (before): ${grid.openSet.length}`);
 
 	current.neighbors.forEach(point => {
 		point.open();
@@ -73,13 +71,9 @@ for (let i = 0; i < runTimes; i++) {
 			},
 		];
 	});
-	//log(current.neighbors.length);
-	//console.log(`grid.openSet.length (after): ${grid.openSet.length}`);
 
 	grid.openSet = sort(grid.openSet);
 	if (i == runTimes - 1) printf(grid.openSet);
-	//log(grid.openSet[grid.openSet.length - 1]);
 }
 
 printGrid(grid.area);
-//printPath(map);

@@ -27,6 +27,8 @@ let printGrid = grid => {
 			cols += ` ${set} `;
 		}
 		console.log(cols);
+		console.log('');
+		console.log('');
 	});
 };
 

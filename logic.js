@@ -1,7 +1,7 @@
 let { log, roundTo, heuristic } = require('./wrap');
 
 let assignValues = (newPoint, originalPoint, d = 1) => {
-	newPoint.g = d + originalPoint;
+	newPoint.g = d * 0.9 + originalPoint;
 	newPoint.h = heuristic(newPoint);
 	newPoint.f = newPoint.g + newPoint.h;
 	return newPoint;

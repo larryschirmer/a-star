@@ -32,7 +32,7 @@ let heuristic = point => {
 	let a = point.x - point.end.r;
 	let b = point.y - point.end.c;
 	let c = Math.sqrt(a * a + b * b);
-	return c;
+	return c * 0.99999;
 };
 
 let sort = array => {
@@ -45,7 +45,9 @@ let sort = array => {
 
 let printf = array => {
 	array.forEach(point => {
-		console.log(`f: ${roundTo(point.f, 2)} x/y: ${point.spot.x}/${point.spot.y}`);
+		console.log(
+			`f/g/h: ${roundTo(point.f, 2)}/${roundTo(point.spot.g, 2)}/${roundTo(point.spot.h, 2)} x/y: ${point.spot.x}/${point.spot.y}`
+		);
 	});
 };
 
