@@ -67,6 +67,10 @@ let isCurrentAtEnd = point => {
 	return truth;
 };
 
+function chainError(err) {
+	return Promise.reject(err);
+}
+
 module.exports = {
 	row,
 	col,
@@ -79,4 +83,5 @@ module.exports = {
 	printf,
 	removeCurrent,
 	isCurrentAtEnd,
+	chainError,
 };

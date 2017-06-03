@@ -1,5 +1,7 @@
 let { findNeighbors, Spot, showNeighbors, makeGrid } = require('./logic');
 let { log, roundTo, digitCount, makeSpace, isCurrentAtEnd } = require('./wrap');
+let { getEndPoint } = require('./astar_export');
+let { makeMap } = require('./logic');
 require('draftlog')(console);
 const readline = require('readline');
 
@@ -63,8 +65,20 @@ let printMap = (grid, pathMap) => {
 	});
 };
 
+function printEnd(grid) {
+	let end = getEndPoint(grid);
+	let path = makeMap([], grid.area, grid.area[end.x][end.y]);
+	log(path);
+	console.log('');
+	printMap(grid.area, path);
+	log(grid.iterations);
+	log(path.length);
+	console.log(`end.g: ${grid.area[end.x][end.y].g}`);
+}
+
 module.exports = {
 	log,
 	printGrid,
 	printMap,
+	printEnd,
 };

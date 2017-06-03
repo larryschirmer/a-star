@@ -1,12 +1,12 @@
-const cols = 15, rows = 15;
+const cols = 16, rows = 16;
 
 let start = {
-	r: 8,
-	c: 5,
+	x: 9,
+	y: 4,
 };
 let end = {
 	r: 1,
-	c: 13,
+	c: 14,
 };
 
 let walls = [

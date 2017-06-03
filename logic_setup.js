@@ -37,6 +37,21 @@ function Spot() {
 		};
 		this.neighbors = findNeighbors(point, grid);
 	};
+
+	this.processNeighbors = openSet => {
+		this.neighbors.forEach(point => {
+			point.open();
+			openSet = [
+				...openSet,
+				{
+					f: point.f,
+					spot: point,
+				},
+			];
+		});
+		return openSet;
+	};
+
 	this.previous = {
 		x: 0,
 		y: 0,
@@ -62,7 +77,7 @@ let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 			nodeObject.rows = rows;
 			nodeObject.cols = cols;
 			nodeObject.end = end;
-			if (start.r == i && start.c == j) nodeObject.isStart = true;
+			if (start.x == i && start.y == j) nodeObject.isStart = true;
 			if (end.r == i && end.c == j) nodeObject.isEnd = true;
 			if (wallLogic(i, j, rows, cols)) nodeObject.makeWall();
 			if (nodeObject.isStart == true && nodeObject.set == 'W') {
@@ -86,6 +101,8 @@ let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 		openSet: openSet,
 		closedSet: closedSet,
 		area: gridArray,
+		current: {},
+		iterations: 0,
 	};
 };
 

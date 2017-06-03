@@ -11,14 +11,15 @@ let assignValues = (newPoint, originalPoint, dir, d = 1) => {
 	return newPoint;
 };
 
+let maxRun = 1000;
 let makeMap = (map, grid, point) => {
-	if (point.isStart !== true) {
+	if (point.isStart !== true && maxRun >= 0) {
 		map = [...map, [point.x, point.y]];
 		let nextPoint = {
 			x: point.previous.x,
 			y: point.previous.y,
 		};
-		//log(map);
+		maxRun -= 1;
 		return makeMap(map, grid, grid[nextPoint.x][nextPoint.y]);
 	} else {
 		map = [...map, [point.x, point.y]];
