@@ -44,13 +44,13 @@ let getEndPoint = grid => {
 };
 
 //// Initial Setup
-let initalSetup = (grid_opts, Spot, start) => {
+let initalSetup = (grid_opts, Spot) => {
 	return new Promise((res, rej) => {
 		//Make the grid
 		let grid = makeGrid(grid_opts, Spot);
 
 		//Select the start point
-		let current = selectPoint(grid, start);
+		let current = selectPoint(grid, grid_opts.start);
 
 		//tell grid where it is
 		grid.current = current;

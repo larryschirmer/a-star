@@ -117,6 +117,5 @@ let grid_opts = {
 };
 
 module.exports = {
-	start,
 	grid_opts,
 };
