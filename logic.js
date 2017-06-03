@@ -125,7 +125,7 @@ let showNeighbors = neighbors => {
 			spot.h = heuristic(spot);
 			let end_r_truthy = leastNeighbor.place.x == spot.end.r;
 			let end_c_truthy = leastNeighbor.place.y == spot.end.c;
-			if (end_r_truthy && end_c_truthy) console.log('done');
+			//if (end_r_truthy && end_c_truthy) console.log('done');
 
 			if (spot.h + spot.g < leastNeighbor.val) {
 				leastNeighbor.place = {

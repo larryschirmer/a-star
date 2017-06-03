@@ -3,14 +3,17 @@ let { log, roundTo, digitCount, makeSpace, isCurrentAtEnd } = require('./wrap');
 require('draftlog')(console);
 const readline = require('readline');
 
+let output = console.draft('');
+
 let printGrid = grid => {
+	let rows = '';
 	grid.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
 			let set;
 			if (set == 0) set = '0    ';
 			if (row[i].set == 'X') set = `  X `;
-			if (row[i].set == '') set = `  | `;
+			if (row[i].set == '') set = `  • `;
 			if (row[i].set == 'C') set = `  M `;
 			if (row[i].set == 'W' && digitCount(row[i].x) == 2) set = `${row[i].x}/${row[i].y}`;
 			if (row[i].set == 'W' && digitCount(row[i].x) == 1) set = ` ${row[i].x}/${row[i].y}`;
@@ -22,11 +25,18 @@ let printGrid = grid => {
 
 			cols += ` ${set} `;
 		}
-		console.log(cols);
-		console.log('');
-		console.log('');
+		//console.log(cols);
+		//console.log('');
+		//console.log('');
+		rows += `${cols} \n\n\n`;
 	});
+	output(rows);
+	rows = '';
 };
+
+// let printGrid = grid => {
+// 	output(new Date().toString());
+// };
 
 let printMap = (grid, pathMap) => {
 	for (let i = 0; i < pathMap.length; i++) {
@@ -38,7 +48,7 @@ let printMap = (grid, pathMap) => {
 	grid.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
-			let set = `  A `;
+			let set = `  • `;
 			if (row[i].set == 'W') set = `  W `;
 
 			if (row[i].path == 'P') set = `  ${row[i].previous.dir} `;

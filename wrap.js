@@ -9,7 +9,7 @@ let col = index => {
 };
 
 let log = msg => {
-	console.log(util.inspect(msg, false, null));
+	console.log(util.inspect(msg, false, null, true));
 };
 
 function roundTo(n, digits = 0) {
@@ -32,7 +32,7 @@ let heuristic = point => {
 	let a = point.x - point.end.r;
 	let b = point.y - point.end.c;
 	let c = Math.sqrt(a * a + b * b);
-	return c * 0.44;
+	return c * 0.4;
 };
 
 let sort = array => {

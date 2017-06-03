@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "draftlog": "^1.0.12",
     "util": "^0.10.3"
   }
 }

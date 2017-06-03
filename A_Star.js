@@ -4,6 +4,7 @@ let { Spot, makeGrid } = require('./logic_setup');
 let { findNeighbors, showNeighbors, makeMap } = require('./logic');
 let { start, grid_opts } = require('./settings');
 
+//Make the grid
 let grid = makeGrid(grid_opts, Spot);
 
 //One
@@ -49,16 +50,20 @@ let actionLoop = _ => {
 	});
 
 	grid.openSet = sort(grid.openSet);
-	printGrid(grid.area);
+	//printGrid(grid.area);
 };
 
 let runIndex = 0;
 (function runLoop() {
-	if (runIndex >= 200) printEnd();
+	if (runIndex >= 200) return;
 	if (!isCurrentAtEnd(current)) {
 		actionLoop();
 		runIndex += 1;
-		setTimeout(runLoop, 125);
+		//setTimeout(runLoop, 250);
+		runLoop();
+	} else {
+		setTimeout(printEnd, 250);
+		//printEnd();
 	}
 })();
 
@@ -70,7 +75,7 @@ let endPoint = {
 function printEnd() {
 	let path = makeMap([], grid.area, grid.area[endPoint.x][endPoint.y]);
 	log(path);
-
+	console.log('');
 	printMap(grid.area, path);
 	log(runIndex);
 	log(path.length);
