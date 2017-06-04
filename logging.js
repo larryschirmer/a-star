@@ -50,18 +50,16 @@ let printMap = (grid, pathMap) => {
 	grid.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
-			let set = `  • `;
-			if (row[i].set == 'W') set = `  W `;
+			let set = ` `;
+			if (row[i].set == 'W') set = `•`;
+			if (row[i].set == 'L') set = `•`;
+			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
+			if (row[i].isStart) set = 'S';
+			if (row[i].isEnd) set = 'E';
 
-			if (row[i].path == 'P') set = `  ${row[i].previous.dir} `;
-			if (row[i].isStart) set = '  S ';
-			if (row[i].isEnd) set = '  E ';
-
-			cols += ` ${set} `;
+			cols += `${set} `;
 		}
 		console.log(cols);
-		console.log('');
-		console.log('');
 	});
 };
 

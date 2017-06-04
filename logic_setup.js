@@ -68,7 +68,7 @@ let wallLogic = (i, j, rows, cols) => {
 	return truth;
 };
 
-let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
+let makeGrid = ({ rows, cols, start, end, walls, lights }, node_obj) => {
 	let gridArray = Array.from(new Array(rows), (u, i) => {
 		return Array.from(new Array(cols), (u, j) => {
 			let nodeObject = new node_obj();
@@ -95,6 +95,12 @@ let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 		let x = walls[i].x;
 		let y = walls[i].y;
 		gridArray[x][y].set = 'W';
+	}
+	//console.log(lights);
+	for (let i = 0; i < lights.length; i++) {
+		let x = lights[i].x;
+		let y = lights[i].y;
+		gridArray[x][y].set = 'L';
 	}
 
 	return {
