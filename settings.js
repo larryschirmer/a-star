@@ -106,11 +106,11 @@ function appendLights(points) {
 }
 
 let grid_opts = {
-	rows: rows,
-	cols: cols,
-	start: start,
-	end: end,
-	walls: walls,
+	rows,
+	cols,
+	start,
+	end,
+	walls,
 	lights: lightCollection,
 	geoBound,
 };
