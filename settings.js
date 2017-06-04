@@ -1,5 +1,5 @@
 let { log } = require('./wrap');
-let { applyBoundPoints, isPointInBounds, applyGPSPoint, getGpxData } = require('./settings_export');
+let { getGpxData, applyBounds, isPointInBounds, applyGPSPoint } = require('./make_map/setWalls');
 
 let co = require('co');
 
@@ -47,7 +47,7 @@ function setWalls() {
 	return new Promise((res, rej) => {
 		co(function*() {
 			let rawGPX = yield getGpxData(gpsFile);
-			walls.push(...applyBoundPoints(walls, geoBound));
+			walls.push(...applyBounds(walls, geoBound));
 
 			for (let i = 0; i < rawGPX.length; i++) {
 				if (isPointInBounds(geoBound, rawGPX[i]))
