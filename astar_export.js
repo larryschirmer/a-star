@@ -1,6 +1,6 @@
 let { makeGrid } = require('./logic_setup');
 let { sort, removeCurrent, isCurrentAtEnd } = require('./wrap');
-let { pushGeo, getGpxData, appendGPX, appendLights, pushLights } = require('./settings');
+let { setWalls } = require('./settings');
 
 let getNextSpot = grid => {
 	return grid.openSet[grid.openSet.length - 1];
@@ -48,9 +48,7 @@ let getEndPoint = grid => {
 let initalSetup = (grid_opts, Spot) => {
 	return new Promise((res, rej) => {
 		//add GPS points
-		getGpxData()
-			.then(appendGPX)
-			.then(pushGeo)
+		setWalls()
 			.then(_ => {
 				//Make the grid
 				let grid = makeGrid(grid_opts, Spot);

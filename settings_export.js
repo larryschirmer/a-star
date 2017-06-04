@@ -2,6 +2,13 @@ let { log, roundTo, heuristic } = require('./wrap');
 let fs = require('fs');
 let co = require('co');
 
+//Get the GPX data
+function getGpxData(gpsFile) {
+	return new Promise((res, rej) => {
+		res(getGpsFile(gpsFile));
+	});
+}
+
 function readGpxFile(fileName) {
 	return new Promise((res, rej) => {
 		let gpxPoints = [];
@@ -126,4 +133,5 @@ module.exports = {
 	applyGPSPoint,
 	readGpxFile,
 	getGpsFile,
+	getGpxData,
 };

@@ -7,7 +7,10 @@ let {
 	applyGPSPoint,
 	readGpxFile,
 	getGpsFile,
+	getGpxData,
 } = require('./settings_export');
+
+let co = require('co');
 
 //Assign how big to make the map
 const cols = 70, rows = 70;
@@ -49,59 +52,21 @@ let geoBound = {
 //Declare the gpx files that need to be parsed
 let gpsFile = ['./gpx_files/mtu.gpx', './gpx_files/mtu1.gpx', './gpx_files/mtu2.gpx'];
 
-//Get the GPX data
-function getGpxData() {
+function setWalls() {
 	return new Promise((res, rej) => {
-		res(getGpsFile(gpsFile));
-	});
-}
+		co(function*() {
+			let rawGPX = yield getGpxData(gpsFile);
+			walls.push(...applyBoundPoints(walls, geoBound));
 
-let gpsPoints = [];
-let lights = [];
-let lightCollection = [];
+			for (let i = 0; i < rawGPX.length; i++) {
+				if (isPointInBounds(geoBound, rawGPX[i]))
+					walls.push(applyGPSPoint(walls, geoBound, rawGPX[i]));
+			}
 
-function pushGeo() {
-	return new Promise((res, rej) => {
-		walls.push(...applyBoundPoints(walls, geoBound));
-
-		for (let i = 0; i < gpsPoints.length; i++) {
-			if (isPointInBounds(geoBound, gpsPoints[i]))
-				walls.push(applyGPSPoint(walls, geoBound, gpsPoints[i]));
-		}
-		res();
-	});
-}
-
-// Have everything be a wall,
-// then have the geo point disbale the wall
-
-function pushLights() {
-	return new Promise((res, rej) => {
-		for (let i = 0; i < lights.length; i++) {
-			if (isPointInBounds(geoBound, lights[i]))
-				lightCollection.push(applyGPSPoint(lightCollection, geoBound, lights[i]));
-		}
-		res();
-	});
-}
-
-// a light would go one step further,
-// disbaling the wall, and setting it as
-// a special point
-
-function appendGPX(points) {
-	return new Promise((res, rej) => {
-		gpsPoints.push(...points);
-		console.log(`appendGPX - gpsPoints.length: ${gpsPoints.length}`);
-		res();
-	});
-}
-
-function appendLights(points) {
-	return new Promise((res, rej) => {
-		lights.push(...points);
-		console.log(`appendGPX - gpsPoints.length: ${gpsPoints.length}`);
-		res();
+			res();
+		}).catch(err => {
+			console.log(err);
+		});
 	});
 }
 
@@ -111,15 +76,10 @@ let grid_opts = {
 	start,
 	end,
 	walls,
-	lights: lightCollection,
 	geoBound,
 };
 
 module.exports = {
 	grid_opts,
-	pushGeo,
-	getGpxData,
-	appendGPX,
-	appendLights,
-	pushLights,
+	setWalls,
 };
