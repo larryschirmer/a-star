@@ -1,14 +1,5 @@
 let { log } = require('./wrap');
-let {
-	applyBoundPoints,
-	isPointInBounds,
-	getGridScale,
-	unitsToShift,
-	applyGPSPoint,
-	readGpxFile,
-	getGpsFile,
-	getGpxData,
-} = require('./settings_export');
+let { applyBoundPoints, isPointInBounds, applyGPSPoint, getGpxData } = require('./settings_export');
 
 let co = require('co');
 
