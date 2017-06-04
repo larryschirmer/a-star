@@ -1,6 +1,6 @@
 let { findNeighbors, Spot, showNeighbors, makeGrid } = require('./logic');
 let { log, roundTo, digitCount, makeSpace, isCurrentAtEnd } = require('./wrap');
-let { getEndPoint } = require('./astar_export');
+let { getEndPoint } = require('./make_map/astar_export');
 let { makeMap } = require('./logic');
 require('draftlog')(console);
 const readline = require('readline');

@@ -1,5 +1,5 @@
-let { findNeighbors } = require('./logic');
-let { log } = require('./logging');
+let { findNeighbors } = require('../logic');
+let { log } = require('../logging');
 
 function Spot() {
 	this.f = 0;

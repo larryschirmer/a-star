@@ -1,7 +1,7 @@
 let { log } = require('../logging');
 let { grid_opts } = require('../settings');
-let { initalSetup, runLoop } = require('../astar_export');
-let { Spot } = require('../logic_setup');
+let { initalSetup, runLoop } = require('../make_map/astar_export');
+let { Spot } = require('../make_map/setup');
 let { printEnd } = require('../logging');
 let { chainError } = require('../wrap');
 
