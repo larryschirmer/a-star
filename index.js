@@ -29,4 +29,6 @@ Procedure:
 - Print the End Result
 */
 
-initalSetup(grid_opts, Spot).then(runLoop).then(printEnd).catch(chainError);
+initalSetup(grid_opts, Spot).then(runLoop).then(printEnd).catch(err => {
+	console.log(err);
+});

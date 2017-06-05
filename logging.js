@@ -7,23 +7,18 @@ const readline = require('readline');
 
 let output = console.draft('');
 
-let printGrid = grid => {
+let printGrids = grid => {
 	let rows = '';
 	grid.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
-			let set;
-			if (set == 0) set = '0    ';
-			if (row[i].set == 'X') set = `  X `;
-			if (row[i].set == '') set = `  • `;
-			if (row[i].set == 'C') set = `  M `;
-			if (row[i].set == 'W' && digitCount(row[i].x) == 2) set = `${row[i].x}/${row[i].y}`;
-			if (row[i].set == 'W' && digitCount(row[i].x) == 1) set = ` ${row[i].x}/${row[i].y}`;
-
-			if (row[i].set !== 'W' && digitCount(row[i].y) > 1) set += ` `;
-
-			if (row[i].isStart) set = '  S ';
-			if (row[i].isEnd) set = '  E ';
+			let set = `•`;
+			if (row[i].set == 'W') set = ` `;
+			if (row[i].set == 'X') set = `X`;
+			if (row[i].set == 'C') set = `C`;
+			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
+			if (row[i].isStart) set = 'S';
+			if (row[i].isEnd) set = 'E';
 
 			cols += ` ${set} `;
 		}
@@ -35,6 +30,8 @@ let printGrid = grid => {
 	output(rows);
 	rows = '';
 };
+
+let printGrid = 'two';
 
 // let printGrid = grid => {
 // 	output(new Date().toString());
@@ -50,9 +47,8 @@ let printMap = (grid, pathMap) => {
 	grid.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
-			let set = ` `;
-			if (row[i].set == 'W') set = `•`;
-			if (row[i].set == 'L') set = `•`;
+			let set = `•`;
+			if (row[i].set == 'W') set = ` `;
 			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
 			if (row[i].isStart) set = 'S';
 			if (row[i].isEnd) set = 'E';

@@ -77,14 +77,15 @@ let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 			nodeObject.rows = rows;
 			nodeObject.cols = cols;
 			nodeObject.end = end;
+			nodeObject.makeWall();
 			if (start.x == i && start.y == j) nodeObject.isStart = true;
 			if (end.r == i && end.c == j) nodeObject.isEnd = true;
-			if (wallLogic(i, j, rows, cols)) nodeObject.makeWall();
+			//if (wallLogic(i, j, rows, cols)) nodeObject.makeWall();
 			if (nodeObject.isStart == true && nodeObject.set == 'W') {
-				throw new TypeError('start cannot be a wall');
+				//throw new TypeError('start cannot be a wall');
 			}
 			if (nodeObject.isEnd == true && nodeObject.set == 'W') {
-				throw new TypeError('end cannot be a wall');
+				//throw new TypeError('end cannot be a wall');
 			}
 			return nodeObject;
 		});
@@ -94,7 +95,7 @@ let makeGrid = ({ rows, cols, start, end, walls }, node_obj) => {
 	for (let i = 0; i < walls.length; i++) {
 		let x = walls[i].x;
 		let y = walls[i].y;
-		gridArray[x][y].set = 'W';
+		gridArray[x][y].set = '';
 	}
 	// //console.log(lights);
 	// for (let i = 0; i < lights.length; i++) {

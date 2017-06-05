@@ -45,11 +45,11 @@ function readGpxFile(fileName) {
 function getGridScale(geoData, dir) {
 	let geoDifference, gridDifference;
 	if (dir == 'lr') {
-		geoDifference = geoData.nw_w - geoData.ne_w;
-		gridDifference = geoData.ne_pt[1] - geoData.nw_pt[1];
-	} else if (dir == 'ud') {
 		geoDifference = geoData.nw_n - geoData.sw_n;
 		gridDifference = geoData.sw_pt[0] - geoData.nw_pt[0];
+	} else if (dir == 'ud') {
+		geoDifference = geoData.nw_w - geoData.ne_w;
+		gridDifference = geoData.ne_pt[1] - geoData.nw_pt[1];
 	} else {
 		throw new Error('pick valid scale option');
 	}

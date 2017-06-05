@@ -1,3 +1,4 @@
+//let { printGrid } = require('../logging');
 let { setWalls } = require('../settings');
 let { makeGrid } = require('./setup');
 
