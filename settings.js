@@ -4,7 +4,7 @@ let { getGpxData, applyBounds, isPointInBounds, applyGPSPoint } = require('./mak
 let co = require('co');
 
 //Assign how big to make the map
-const cols = 70, rows = 35;
+const cols = 70, rows = 45;
 
 //Assign the start and end points
 const start = {
@@ -20,7 +20,7 @@ const start = {
 let walls = [];
 
 //Set the Geo Data Boundries
-let north = 47.120800, east = 88.539000, south = 47.115226, west = 88.553000;
+let north = 47.121800, east = 88.539000, south = 47.115226, west = 88.553000;
 
 let geoBound = {
 	nw_n: north,
@@ -44,6 +44,7 @@ let gpsFile = [
 	'./gpx_files/mtu2.gpx',
 	'./gpx_files/mtu3.gpx',
 	'./gpx_files/mtu4.gpx',
+	'./gpx_files/mtu5.gpx',
 ];
 
 function setWalls() {
