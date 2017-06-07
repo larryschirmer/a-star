@@ -49,6 +49,7 @@ let printMap = (grid, pathMap) => {
 		for (let i = 0; i < row.length; i++) {
 			let set = `•`;
 			if (row[i].set == 'W') set = ` `;
+			if (row[i].set == 'C') set = `C`;
 			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
 			if (row[i].isStart) set = 'S';
 			if (row[i].isEnd) set = 'E';
@@ -70,9 +71,23 @@ function printEnd(grid) {
 	console.log(`end.g: ${grid.area[end.x][end.y].g}`);
 }
 
+let printPlainGrid = grid => {
+	grid.forEach(row => {
+		let cols = '';
+		for (let i = 0; i < row.length; i++) {
+			let set = `•`;
+			if (row[i].set == 'W') set = ` `;
+
+			cols += `${set} `;
+		}
+		console.log(cols);
+	});
+};
+
 module.exports = {
 	log,
 	printGrid,
 	printMap,
 	printEnd,
+	printPlainGrid,
 };

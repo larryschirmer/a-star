@@ -28,9 +28,9 @@ function makeSpace(num) {
 	return spaceArray.join('');
 }
 
-let heuristic = point => {
-	let a = point.x - point.end.r;
-	let b = point.y - point.end.c;
+let heuristic = (point, end) => {
+	let a = point.x - end.x;
+	let b = point.y - end.y;
 	let c = Math.sqrt(a * a + b * b);
 	return c * 0.4;
 };
@@ -60,9 +60,9 @@ let removeCurrent = array => {
 	return workingSet;
 };
 
-let isCurrentAtEnd = point => {
+let isCurrentAtEnd = (point, end) => {
 	let currentXY = [point.x, point.y];
-	let endXY = [point.end.r, point.end.c];
+	let endXY = [end.x, end.y];
 	let truth = currentXY[0] == endXY[0] && currentXY[1] == endXY[1] ? true : false;
 	return truth;
 };

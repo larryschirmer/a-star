@@ -14,8 +14,6 @@ function Spot() {
 	this.isStart = false;
 	this.isEnd = false;
 
-	this.end = {};
-
 	this.path = '';
 
 	this.set = '';
@@ -30,12 +28,12 @@ function Spot() {
 	};
 	this.isNeighbor = false;
 	this.neighbors = [];
-	this.getNeighbors = grid => {
+	this.getNeighbors = (grid, end) => {
 		let point = {
-			r: this.x,
-			c: this.y,
+			x: this.x,
+			y: this.y,
 		};
-		this.neighbors = findNeighbors(point, grid);
+		this.neighbors = findNeighbors(grid, point, end);
 	};
 
 	this.processNeighbors = openSet => {

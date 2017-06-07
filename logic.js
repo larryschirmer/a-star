@@ -1,8 +1,9 @@
 let { log, roundTo, heuristic } = require('./wrap');
 
-let assignValues = (newPoint, originalPoint, dir, d = 1) => {
+let assignValues = (end, newPoint, originalPoint, dir, d = 1) => {
 	newPoint.g = d * 0.9 + originalPoint.g;
-	newPoint.h = heuristic(newPoint);
+	//log(newPoint);
+	newPoint.h = heuristic(newPoint, end);
 	newPoint.f = newPoint.g + newPoint.h;
 
 	newPoint.previous.x = originalPoint.x;
@@ -27,88 +28,88 @@ let makeMap = (map, grid, point) => {
 	}
 };
 
-let findNeighbors = (point, grid) => {
+let findNeighbors = (grid, point, end) => {
 	let rowAmt = grid.length - 1;
 	let colAmt = grid[0].length - 1;
 	let list = [];
-	let point_info = grid[point.r][point.c];
+	let point_info = grid[point.x][point.y];
 
 	//Point to the Top
-	let topPoint = grid[point.r - 1][point.c];
+	let topPoint = grid[point.x - 1][point.y];
 	if (topPoint.set !== 'W' && topPoint.isStart !== true) {
 		if (topPoint.g == 0) {
 			let dir = '|';
-			topPoint = assignValues(topPoint, point_info, dir);
+			topPoint = assignValues(end, topPoint, point_info, dir);
 			list.push(topPoint);
 		}
 	}
 
 	//Point to the Top Right
-	let topRightPoint = grid[point.r - 1][point.c + 1];
+	let topRightPoint = grid[point.x - 1][point.y + 1];
 	if (topRightPoint.set !== 'W' && topRightPoint.isStart !== true) {
 		if (topRightPoint.g == 0) {
 			let dir = '/';
-			topRightPoint = assignValues(topRightPoint, point_info, dir, 1.414);
+			topRightPoint = assignValues(end, topRightPoint, point_info, dir, 1.414);
 			list.push(topRightPoint);
 		}
 	}
 
 	//Point to the Right
-	let rightPoint = grid[point.r][point.c + 1];
+	let rightPoint = grid[point.x][point.y + 1];
 	if (rightPoint.set !== 'W' && rightPoint.isStart !== true) {
 		if (rightPoint.g == 0) {
 			let dir = '-';
-			rightPoint = assignValues(rightPoint, point_info, dir);
+			rightPoint = assignValues(end, rightPoint, point_info, dir);
 			list.push(rightPoint);
 		}
 	}
 
 	//Point to the Bottom Right
-	let bottomRightPoint = grid[point.r + 1][point.c + 1];
+	let bottomRightPoint = grid[point.x + 1][point.y + 1];
 	if (bottomRightPoint.set !== 'W' && bottomRightPoint.isStart !== true) {
 		if (bottomRightPoint.g == 0) {
 			let dir = '\\';
-			bottomRightPoint = assignValues(bottomRightPoint, point_info, dir, 1.414);
+			bottomRightPoint = assignValues(end, bottomRightPoint, point_info, dir, 1.414);
 			list.push(bottomRightPoint);
 		}
 	}
 
 	//Point to the Bottom
-	let bottomPoint = grid[point.r + 1][point.c];
+	let bottomPoint = grid[point.x + 1][point.y];
 	if (bottomPoint.set !== 'W' && bottomPoint.isStart !== true) {
 		if (bottomPoint.g == 0) {
 			let dir = '|';
-			bottomPoint = assignValues(bottomPoint, point_info, dir);
+			bottomPoint = assignValues(end, bottomPoint, point_info, dir);
 			list.push(bottomPoint);
 		}
 	}
 
 	//Point to the Bottom Left
-	let bottomLeftPoint = grid[point.r + 1][point.c - 1];
+	let bottomLeftPoint = grid[point.x + 1][point.y - 1];
 	if (bottomLeftPoint.set !== 'W' && bottomLeftPoint.isStart !== true) {
 		if (bottomLeftPoint.g == 0) {
 			let dir = '/';
-			bottomLeftPoint = assignValues(bottomLeftPoint, point_info, dir, 1.414);
+			bottomLeftPoint = assignValues(end, bottomLeftPoint, point_info, dir, 1.414);
 			list.push(bottomLeftPoint);
 		}
 	}
 
 	//Point to the Left
-	let leftPoint = grid[point.r][point.c - 1];
+	let leftPoint = grid[point.x][point.y - 1];
 	if (leftPoint.set !== 'W' && leftPoint.isStart !== true) {
 		if (leftPoint.g == 0) {
 			let dir = '-';
-			leftPoint = assignValues(leftPoint, point_info, dir);
+			leftPoint = assignValues(end, leftPoint, point_info, dir);
 			list.push(leftPoint);
 		}
 	}
 
 	//Point to the Top Left
-	let topLeftPoint = grid[point.r - 1][point.c - 1];
+	let topLeftPoint = grid[point.x - 1][point.y - 1];
 	if (topLeftPoint.set !== 'W' && topLeftPoint.isStart !== true) {
 		if (topLeftPoint.g == 0) {
 			let dir = '\\';
-			topLeftPoint = assignValues(topLeftPoint, point_info, dir, 1.414);
+			topLeftPoint = assignValues(end, topLeftPoint, point_info, dir, 1.414);
 			list.push(topLeftPoint);
 		}
 	}

@@ -1,37 +1,87 @@
 //let { printGrid } = require('../logging');
+let { log } = require('../wrap');
 let { setWalls } = require('../settings');
 let { makeGrid } = require('./setup');
+let co = require('co');
 
 let { sort, removeCurrent, isCurrentAtEnd } = require('../wrap');
+let { Grid } = require('../organize/createMap');
+
+//let { printPlainGrid } = require('../logging');
+
+//////
+const mapSize = {
+	rows: 25,
+	cols: 70,
+};
+//Set the Geo Data Boundries
+const north = 47.121800, east = 88.539000, south = 47.115226, west = 88.553000;
+const top = 1, right = 68, bottom = 23, left = 1;
+
+const geoBound = {
+	nw_n: north,
+	nw_w: west,
+	nw_pt: [top, left],
+	ne_n: north,
+	ne_w: east,
+	ne_pt: [top, right],
+	sw_n: south,
+	sw_w: west,
+	sw_pt: [bottom, left],
+	se_n: south,
+	se_w: east,
+	se_pt: [bottom, right],
+};
+
+//Declare the gpx files that need to be parsed
+const gpsFile = [
+	'./gpx_files/mtu.gpx',
+	'./gpx_files/mtu1.gpx',
+	'./gpx_files/mtu2.gpx',
+	'./gpx_files/mtu3.gpx',
+	'./gpx_files/mtu4.gpx',
+	'./gpx_files/mtu5.gpx',
+];
+
+const start = {
+	x: 16,
+	y: 56,
+},
+	end = {
+		x: 7,
+		y: 12,
+	};
+//////
 
 //// Initial Setup
 let initalSetup = (grid_opts, Spot) => {
 	return new Promise((res, rej) => {
-		//add GPS points
-		setWalls()
-			.then(_ => {
-				//Make the grid
-				let grid = makeGrid(grid_opts, Spot);
+		co(function*() {
+			let masterMap = new Grid(gpsFile, mapSize, geoBound);
+			yield masterMap.setPoints();
+			let grid = yield masterMap.makeGrid();
 
-				//Select the start point
-				let current = selectPoint(grid, grid_opts.start);
+			printPlainGrid(grid);
 
-				//tell grid where it is
-				grid.current = current;
+			//Select the start point
+			let current = grid.area[start.x][start.y];
+			current.isStart = true;
 
-				//Get start's initial neighbors
-				current.getNeighbors(grid.area);
+			//tell grid where it is
+			grid.current = current;
 
-				//Process neighbors into the open set
-				grid.openSet = current.processNeighbors(grid.openSet);
+			//Get start's initial neighbors
+			current.getNeighbors(grid.area, end);
 
-				//Put the most reasonable next guess at the end of list
-				grid.openSet = sort(grid.openSet);
-				res(grid);
-			})
-			.catch(err => {
-				console.log(err);
-			});
+			//Process neighbors into the open set
+			grid.openSet = current.processNeighbors(grid.openSet);
+
+			//Put the most reasonable next guess at the end of list
+			grid.openSet = sort(grid.openSet);
+			res(grid);
+		}).catch(err => {
+			console.log(err);
+		});
 	});
 };
 
@@ -40,7 +90,8 @@ let getNextSpot = grid => {
 };
 
 let selectPoint = (grid, point) => {
-	return grid.area[point.x][point.y];
+	point = grid.area[point.x][point.y];
+	return point;
 };
 
 let actionLoop = grid => {
@@ -60,7 +111,7 @@ let actionLoop = grid => {
 	grid.openSet = removeCurrent(grid.openSet);
 
 	//Get start's initial neighbors
-	current.getNeighbors(grid.area);
+	current.getNeighbors(grid.area, end);
 
 	//Process neighbors into the open set
 	grid.openSet = current.processNeighbors(grid.openSet);
@@ -72,8 +123,8 @@ let actionLoop = grid => {
 
 let getEndPoint = grid => {
 	return {
-		x: grid.area[0][0].end.r,
-		y: grid.area[0][0].end.c,
+		x: end.x,
+		y: end.y,
 	};
 };
 
@@ -81,15 +132,29 @@ let runIndex = 1;
 function runLoop(grid) {
 	return new Promise((res, rej) => {
 		if (runIndex >= 5000) rej('too many passes');
-		if (!isCurrentAtEnd(grid.current)) {
+		if (!isCurrentAtEnd(grid.current, end)) {
 			runIndex += 1;
 			res(runLoop(actionLoop(grid)));
 		} else {
+			grid.current.isEnd = true;
 			grid.iterations = runIndex;
 			res(grid);
 		}
 	});
 }
+
+let printPlainGrid = grid => {
+	grid.area.forEach(row => {
+		let cols = '';
+		for (let i = 0; i < row.length; i++) {
+			let set = `•`;
+			if (row[i].set == 'W') set = ` `;
+
+			cols += `${set} `;
+		}
+		console.log(cols);
+	});
+};
 
 module.exports = {
 	actionLoop,
