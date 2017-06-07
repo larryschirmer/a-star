@@ -1,4 +1,6 @@
 let createMap = require('./createMap').describe;
+let SpotObj = require('./SpotObj').describe;
+let MapObj = require('./MapObj').describe;
 
 let fileTree = obj => {
 	let log = string => {
@@ -19,14 +21,16 @@ let fileTree = obj => {
 		console.log(`  Methods:`);
 		obj.methods.forEach(log);
 		printBreak();
-		console.log(`  Usage:`);
-		obj.usage.forEach(log);
-		printBreak();
 		console.log(`  Supporting Functions:`);
 		obj.supportingFunctions.forEach(log);
+		printBreak();
+		console.log(`  Usage:`);
+		obj.usage.forEach(log);
 		printBreak();
 	};
 	print();
 };
 
 fileTree(createMap);
+fileTree(SpotObj);
+fileTree(MapObj);

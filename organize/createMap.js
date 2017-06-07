@@ -1,6 +1,7 @@
 let co = require('co');
 let fs = require('fs');
-let { Spot } = require('../make_map/setup');
+let { SpotObj } = require('./SpotObj');
+let { MapObj } = require('./MapObj');
 
 let describe = {
 	className: 'Grid',
@@ -76,27 +77,19 @@ function Grid(gpxFiles = null, mapSize = null, geo_props = null) {
 	function makeGrid() {
 		let gridArray = Array.from(new Array(properties.rows), (u, i) => {
 			return Array.from(new Array(properties.cols), (u, j) => {
-				return { set: 'W' };
+				return { type: 'W' };
 			});
 		});
 
 		for (let i = 0; i < properties.points.length; i++) {
-			let cell = new Spot();
+			let cell = new SpotObj();
 			cell.x = properties.points[i].x;
 			cell.y = properties.points[i].y;
-			cell.rows = properties.rows;
-			cell.cols = properties.cols;
-			cell.set = '';
+			cell.type = '';
 			gridArray[cell.x][cell.y] = cell;
 		}
 
-		return {
-			openSet: [],
-			closedSet: [],
-			area: gridArray,
-			current: {},
-			iterations: 0,
-		};
+		return new MapObj(gridArray);
 	}
 
 	obj.setPoints = setPoints;

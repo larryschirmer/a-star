@@ -13,9 +13,9 @@ let printGrids = grid => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
 			let set = `•`;
-			if (row[i].set == 'W') set = ` `;
-			if (row[i].set == 'X') set = `X`;
-			if (row[i].set == 'C') set = `C`;
+			if (row[i].type == 'W') set = ` `;
+			if (row[i].type == 'X') set = `X`;
+			if (row[i].type == 'C') set = `C`;
 			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
 			if (row[i].isStart) set = 'S';
 			if (row[i].isEnd) set = 'E';
@@ -48,8 +48,8 @@ let printMap = (grid, pathMap) => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
 			let set = `•`;
-			if (row[i].set == 'W') set = ` `;
-			if (row[i].set == 'C') set = `C`;
+			if (row[i].type == 'W') set = ` `;
+			if (row[i].type == 'C') set = `C`;
 			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
 			if (row[i].isStart) set = 'S';
 			if (row[i].isEnd) set = 'E';

@@ -74,8 +74,6 @@ let initalSetup = (grid_opts, Spot) => {
 			//Process neighbors into the open set
 			grid.openSet = current.processNeighbors(grid.openSet);
 
-			//Put the most reasonable next guess at the end of list
-			grid.openSet = sort(grid.openSet);
 			res(grid);
 		}).catch(err => {
 			console.log(err);
@@ -114,8 +112,6 @@ let actionLoop = grid => {
 	//Process neighbors into the open set
 	grid.openSet = current.processNeighbors(grid.openSet);
 
-	//Put the most reasonable next guess at the end of list
-	grid.openSet = sort(grid.openSet);
 	return grid;
 };
 
@@ -136,6 +132,7 @@ function runLoop(grid) {
 		} else {
 			grid.current.isEnd = true;
 			grid.iterations = runIndex;
+			console.log(grid.area[16][55]);
 			res(grid);
 		}
 	});
@@ -146,7 +143,7 @@ let printPlainGrid = grid => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
 			let set = `•`;
-			if (row[i].set == 'W') set = ` `;
+			if (row[i].type == 'W') set = ` `;
 
 			cols += `${set} `;
 		}
