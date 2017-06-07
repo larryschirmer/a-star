@@ -1,14 +1,3 @@
-//I need to force one map
-//Give the map certain properties
-//You will be done when:
-//let masterMap = new Map(gpxArr,map_opts)
-//let grid = masterMap.setWalls().makeGrid();
-
-//The One difference between this and the old version is that
-//There is no embedded starting place
-
-//Don't forget to refuse to make a 'Spot' where there is already a wall
-let { log } = require('../wrap');
 let co = require('co');
 let fs = require('fs');
 let { Spot } = require('../make_map/setup');
@@ -20,24 +9,32 @@ let describe = {
 		'geoBound: The properties of the map, the view window and point boundries',
 		'rows: mapSize.rows',
 		'cols: mapSize.cols',
+		'points: the gps points n/w that are stored in the gpx files',
 	],
 	methods: [
 		'setPoints: parses over the gpx files and places x/y values in an array',
 		'makeGrid: returns a two dimentional array with Spot objects where gps points were',
 	],
 	supportingFunctions: [
-		'getGpxData:      setWalls - ',
-		'getGpsFile:      setWalls - requests the gps values from each *.gpx file',
+		'getGpxData:      setWalls - requests the gps values from each *.gpx file',
 		'readGpxFile:     setWalls - parses each file and returns gps points in an array',
 		'isPointInBounds: setWalls - checks is gps point is in the specified range',
 		'applyGPSPoint:   setWalls - converts gps point to row/col place in the grid',
 		'getGridScale:    setWalls - returns the amount of lat/long per cell in grid',
 		'unitsToShift:    setWalls - returns the amount to shift the point from the NW point',
 	],
-	usage: [
-		'let masterMap = new Map(gpxArr,map_opts)',
-		'let grid = masterMap.setPoints().makeGrid()',
-	],
+	usage: ['let grid = yield getGrid(gpsFile, mapSize, geoBound)'],
+};
+let getGrid = (gpsFile, mapSize, geoBound) => {
+	return new Promise((res, rej) => {
+		co(function*() {
+			let masterMap = new Grid(gpsFile, mapSize, geoBound);
+			let grid = yield masterMap.setPoints().then(masterMap.makeGrid);
+			res(grid);
+		}).catch(err => {
+			console.log(err);
+		});
+	});
 };
 
 function Grid(gpxFiles = null, mapSize = null, geo_props = null) {
@@ -109,20 +106,13 @@ function Grid(gpxFiles = null, mapSize = null, geo_props = null) {
 }
 
 module.exports = {
-	Grid,
+	getGrid,
 	describe,
 };
 
 ////
 //Functions that Support 'setWalls'
-//
-function getGpxData(gpsFile) {
-	return new Promise((res, rej) => {
-		res(getGpsFile(gpsFile));
-	});
-}
-// --V
-function getGpsFile(fileNames) {
+function getGpxData(fileNames) {
 	return new Promise((res, rej) => {
 		co(function*() {
 			let files = [];

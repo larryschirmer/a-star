@@ -5,7 +5,7 @@ let { makeGrid } = require('./setup');
 let co = require('co');
 
 let { sort, removeCurrent, isCurrentAtEnd } = require('../wrap');
-let { Grid } = require('../organize/createMap');
+let { getGrid } = require('../organize/createMap');
 
 //let { printPlainGrid } = require('../logging');
 
@@ -57,8 +57,7 @@ const start = {
 let initalSetup = (grid_opts, Spot) => {
 	return new Promise((res, rej) => {
 		co(function*() {
-			let masterMap = new Grid(gpsFile, mapSize, geoBound);
-			let grid = yield masterMap.setPoints().then(masterMap.makeGrid);
+			let grid = yield getGrid(gpsFile, mapSize, geoBound);
 
 			printPlainGrid(grid);
 

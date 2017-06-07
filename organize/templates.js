@@ -20,28 +20,12 @@ let methods = ['', ''];
 
 let usage = ['', ''];
 
-let fileTree = _ => {
-	let log = string => {
-		console.log(`  ${string}`);
-	};
-
-	let printBreak = opt => {
-		if (opt == 'line') console.log(`--------------------`);
-		if (!opt) console.log(``);
-	};
-
-	let print = _ => {
-		console.log(`Class Name: ${className}`);
-		printBreak('line');
-		console.log(`  Properties:`);
-		properties.forEach(log);
-		printBreak();
-		console.log(`  Methods:`);
-		methods.forEach(log);
-		printBreak();
-		console.log(`  Usage:`);
-		usage.forEach(log);
-		printBreak();
-	};
-	print();
+let funcName = _ => {
+	return new Promise((res, rej) => {
+		co(function*() {
+			res();
+		}).catch(err => {
+			console.log(err);
+		});
+	});
 };
