@@ -58,8 +58,7 @@ let initalSetup = (grid_opts, Spot) => {
 	return new Promise((res, rej) => {
 		co(function*() {
 			let masterMap = new Grid(gpsFile, mapSize, geoBound);
-			yield masterMap.setPoints();
-			let grid = yield masterMap.makeGrid();
+			let grid = yield masterMap.setPoints().then(masterMap.makeGrid);
 
 			printPlainGrid(grid);
 
