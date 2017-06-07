@@ -1,7 +1,7 @@
 let { findNeighbors, Spot, showNeighbors, makeGrid } = require('./logic');
 let { log, roundTo, digitCount, makeSpace, isCurrentAtEnd } = require('./wrap');
 let { getEndPoint } = require('./make_map/astar_export');
-let { makeMap } = require('./logic');
+//let { makeMap } = require('./logic');
 require('draftlog')(console);
 const readline = require('readline');
 
@@ -60,9 +60,26 @@ let printMap = (grid, pathMap) => {
 	});
 };
 
+let maxRun = 1000;
+let makeMap = (grid, point, map = []) => {
+	if (point.isStart !== true && maxRun >= 0) {
+		log(point);
+		map = [...map, [point.x, point.y]];
+		let nextPoint = {
+			x: point.previous.x,
+			y: point.previous.y,
+		};
+		maxRun -= 1;
+		return makeMap(map, grid, grid[nextPoint.x][nextPoint.y]);
+	} else {
+		map = [...map, [point.x, point.y]];
+		return map.reverse();
+	}
+};
+
 function printEnd(grid) {
 	let end = getEndPoint(grid);
-	let path = makeMap([], grid.area, grid.area[end.x][end.y]);
+	let path = makeMap(grid.area, grid.area[end.x][end.y]);
 	log(path);
 	console.log('');
 	printMap(grid.area, path);
@@ -72,11 +89,11 @@ function printEnd(grid) {
 }
 
 let printPlainGrid = grid => {
-	grid.forEach(row => {
+	grid.area.forEach(row => {
 		let cols = '';
 		for (let i = 0; i < row.length; i++) {
 			let set = `•`;
-			if (row[i].set == 'W') set = ` `;
+			if (row[i].type == 'W') set = ` `;
 
 			cols += `${set} `;
 		}

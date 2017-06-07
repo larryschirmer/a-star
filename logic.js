@@ -13,8 +13,9 @@ let assignValues = (end, newPoint, originalPoint, dir, d = 1) => {
 };
 
 let maxRun = 1000;
-let makeMap = (map, grid, point) => {
+let makeMap = (grid, point, map = []) => {
 	if (point.isStart !== true && maxRun >= 0) {
+		log(point);
 		map = [...map, [point.x, point.y]];
 		let nextPoint = {
 			x: point.previous.x,

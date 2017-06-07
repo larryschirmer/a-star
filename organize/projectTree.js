@@ -1,6 +1,7 @@
 let createMap = require('./createMap').describe;
 let SpotObj = require('./SpotObj').describe;
 let MapObj = require('./MapObj').describe;
+let Process = require('./Process').describe;
 
 let fileTree = obj => {
 	let log = string => {
@@ -34,3 +35,4 @@ let fileTree = obj => {
 fileTree(createMap);
 fileTree(SpotObj);
 fileTree(MapObj);
+fileTree(Process);

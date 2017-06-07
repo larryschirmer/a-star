@@ -12,13 +12,13 @@ let Obj = () => {
 	return obj;
 };
 
-let className = '';
-
-let properties = ['', '', ''];
-
-let methods = ['', ''];
-
-let usage = ['', ''];
+let describe = {
+	className: '',
+	properties: [''],
+	methods: [''],
+	supportingFunctions: [''],
+	usage: [''],
+};
 
 let funcName = _ => {
 	return new Promise((res, rej) => {
