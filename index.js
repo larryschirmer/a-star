@@ -1,10 +1,8 @@
-//let { grid_opts, Spot, initalSetup } = require('./interface/modules').make_map;
-// let { runLoop } = require('./interface/modules').processing;
-//let { printEnd, log } = require('./interface/modules').printing;
-let { log } = require('./logging');
-// let { chainError } = require('./interface/modules');
-//let { printPlainGrid } = require('./logging');
 let co = require('co');
+
+let { getGrid } = require('./organize/createMap');
+let { Process } = require('./organize/Process');
+let { gridPrint } = require('./organize/Logging');
 
 /* ---
 Procedure:
@@ -70,65 +68,17 @@ const start = {
 	y: 46,
 },
 	end = {
-		x: 12,
-		y: 40,
+		x: 13,
+		y: 36,
 	};
-
-let { getGrid } = require('./organize/createMap');
-let { Process } = require('./organize/Process');
 
 co(function*() {
 	let grid = yield getGrid(gpsFile, mapSize, geoBound);
-	printPlainGrid(grid);
+	gridPrint.plain(grid);
 
 	let gridResults = yield Process(grid, start, end);
 
-	printEnd(gridResults);
+	gridPrint.map(gridResults);
 }).catch(err => {
 	console.log(err);
 });
-
-function printEnd(results) {
-	let grid = results.grid;
-	let path = results.path;
-	printMap(grid.area, path);
-	log(grid.iterations);
-	log(path.length);
-	console.log(`end.g: ${grid.area[end.x][end.y].g}`);
-}
-
-let printPlainGrid = grid => {
-	grid.area.forEach(row => {
-		let cols = '';
-		for (let i = 0; i < row.length; i++) {
-			let set = `•`;
-			if (row[i].type == 'W') set = ` `;
-
-			cols += `${set} `;
-		}
-		console.log(cols);
-	});
-};
-
-let printMap = (grid, pathMap) => {
-	for (let i = 0; i < pathMap.length; i++) {
-		let x = pathMap[i][0];
-		let y = pathMap[i][1];
-		grid[x][y].path = 'P';
-	}
-
-	grid.forEach(row => {
-		let cols = '';
-		for (let i = 0; i < row.length; i++) {
-			let set = `•`;
-			if (row[i].type == 'W') set = ` `;
-			if (row[i].type == 'C') set = `C`;
-			if (row[i].path == 'P') set = `${row[i].previous.dir}`;
-			if (row[i].isStart) set = 'S';
-			if (row[i].isEnd) set = 'E';
-
-			cols += `${set} `;
-		}
-		console.log(cols);
-	});
-};
