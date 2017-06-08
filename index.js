@@ -31,12 +31,18 @@ Procedure:
 */
 
 const mapSize = {
-	rows: 25,
+	rows: 40,
 	cols: 70,
 };
 //Set the Geo Data Boundries
-const north = 47.121800, east = 88.539000, south = 47.115226, west = 88.553000;
-const top = 1, right = 68, bottom = 23, left = 1;
+const north = 47.1218,
+	east = 88.539,
+	south = 47.115226,
+	west = 88.553;
+const top = 1,
+	right = 68,
+	bottom = 38,
+	left = 1;
 
 const geoBound = {
 	nw_n: north,
@@ -64,21 +70,53 @@ const gpsFile = [
 ];
 
 const start = {
-	x: 14,
-	y: 46,
+	x: 11,
+	y: 8,
 },
 	end = {
-		x: 13,
-		y: 36,
+		x: 11,
+		y: 25,
 	};
 
 co(function*() {
 	let grid = yield getGrid(gpsFile, mapSize, geoBound);
 	gridPrint.plain(grid);
 
-	let gridResults = yield Process(grid, start, end);
+	let gridResults = yield Process(grid, start);
 
-	gridPrint.map(gridResults);
+	let route = yield getRoute(gridResults.area, end);
+
+	gridPrint.map(gridResults, route);
 }).catch(err => {
 	console.log(err);
 });
+
+let getRoute = (grid, end) => {
+	return new Promise((res, rej) => {
+		let point = grid[end.x][end.y];
+		point.isEnd = true;
+		makeMap(grid, point, []).then(map => {
+			res(map);
+		});
+	});
+};
+
+let maxRun = 1000;
+let makeMap = (grid, point, map) => {
+	return new Promise((res, rej) => {
+		if (point.isStart !== true && maxRun >= 0) {
+			map = [...map, [point.x, point.y]];
+			let nextPoint = {
+				x: point.previous.x,
+				y: point.previous.y,
+			};
+			maxRun -= 1;
+			res(makeMap(grid, grid[nextPoint.x][nextPoint.y], map));
+		} else {
+			map = [...map, [point.x, point.y]];
+			res(map.reverse());
+		}
+	}).catch(err => {
+		console.log(err);
+	});
+};

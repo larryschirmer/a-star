@@ -10,7 +10,7 @@ let describe = {
 
 // gets a grid and returns the processed grid and a path map
 
-let Process = (grid, start, end) => {
+let Process = (grid, start) => {
 	//Error Messages
 	//if () throwError('');
 	//if () throwError('');
@@ -18,13 +18,10 @@ let Process = (grid, start, end) => {
 	return new Promise((res, rej) => {
 		co(function*() {
 			grid = setCurrent(grid, start);
-			grid = yield runLoop(grid, end);
+			grid = actionLoop(grid);
+			grid = yield runLoop(grid);
 
-			let path = yield makeMap(grid.area, grid.current, []);
-			res({
-				grid,
-				path,
-			});
+			res(grid);
 		}).catch(err => {
 			console.log(err);
 		});
@@ -39,23 +36,41 @@ module.exports = {
 let setCurrent = (grid, start) => {
 	grid.current = grid.area[start.x][start.y];
 	grid.current.isStart = true;
+	grid.openSet = [grid.current];
+	//
 	return grid;
 };
 
 let runIndex = 1;
-function runLoop(grid, end) {
+function runLoop(grid) {
 	return new Promise((res, rej) => {
-		if (runIndex >= 500) rej('too many passes');
 		if (runIndex < 500) {
-			if (!isCurrentAtEnd(grid.current, end)) {
+			if (grid.openSet.length > 1) {
 				runIndex += 1;
-				res(runLoop(actionLoop(grid, end), end));
+
+				res(runLoop(actionLoop(grid)));
 			} else {
-				grid.current.isEnd = true;
+				grid.openSet = removeCurrent(grid.openSet);
+				grid.current.getNeighbors(grid.area);
+				grid.openSet = grid.current.processNeighbors(grid.openSet);
+				grid.current.close();
 				grid.iterations = runIndex;
 				res(grid);
+				if (grid.openSet.length >= 1) {
+					runIndex += 1;
+					grid.current = getNextSpot(grid);
+					res(runLoop(actionLoop(grid)));
+					res(grid);
+				} else {
+					runIndex += 1;
+
+					res(grid);
+				}
 			}
 		} else {
+			// console.log(grid.openSet);
+			// console.log(grid.openSet[0]);
+			// console.log('open set amount: ', grid.openSet.length);
 			res(grid);
 		}
 	}).catch(err => {
@@ -63,19 +78,12 @@ function runLoop(grid, end) {
 	});
 }
 
-let isCurrentAtEnd = (point, end) => {
-	let currentXY = [point.x, point.y];
-	let endXY = [end.x, end.y];
-	let truth = currentXY[0] == endXY[0] && currentXY[1] == endXY[1] ? true : false;
-	return truth;
-};
-
-let actionLoop = (grid, end) => {
+let actionLoop = (grid, msg = '') => {
 	//remove spot from the processable array
 	grid.openSet = removeCurrent(grid.openSet);
 
 	//Get start's initial neighbors
-	grid.current.getNeighbors(grid.area, end);
+	grid.current.getNeighbors(grid.area);
 
 	//Process neighbors into the open set
 	grid.openSet = grid.current.processNeighbors(grid.openSet);
@@ -90,34 +98,14 @@ let actionLoop = (grid, end) => {
 
 let removeCurrent = array => {
 	let workingSet = [];
-	let last = array.length - 1;
+	//let last = array.length - 1;
 	array.forEach((v, i) => {
-		if (i < last) workingSet = [...workingSet, v];
+		if (i > 0) workingSet = [...workingSet, v];
 	});
 	return workingSet;
 };
 
 let getNextSpot = grid => {
-	let nextSpot = grid.openSet[grid.openSet.length - 1];
+	let nextSpot = grid.openSet[0];
 	return nextSpot.spot;
-};
-
-let maxRun = 1000;
-let makeMap = (grid, point, map) => {
-	return new Promise((res, rej) => {
-		if (point.isStart !== true && maxRun >= 0) {
-			map = [...map, [point.x, point.y]];
-			let nextPoint = {
-				x: point.previous.x,
-				y: point.previous.y,
-			};
-			maxRun -= 1;
-			res(makeMap(grid, grid[nextPoint.x][nextPoint.y], map));
-		} else {
-			map = [...map, [point.x, point.y]];
-			res(map.reverse());
-		}
-	}).catch(err => {
-		console.log(err);
-	});
 };

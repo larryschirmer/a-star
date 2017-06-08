@@ -30,7 +30,7 @@ let describe = {
 function SpotObj() {
 	this.f = 0;
 	this.g = 0;
-	this.h = 0;
+
 	this.x = 0;
 	this.y = 0;
 
@@ -54,12 +54,12 @@ function SpotObj() {
 		this.type = 'C';
 	};
 
-	this.getNeighbors = (grid, end) => {
+	this.getNeighbors = grid => {
 		let point = {
 			x: this.x,
 			y: this.y,
 		};
-		this.neighbors = findNeighbors(grid, point, end);
+		this.neighbors = findNeighbors(grid, point);
 	};
 
 	this.processNeighbors = openSet => {
@@ -73,7 +73,7 @@ function SpotObj() {
 				},
 			];
 		});
-		return sort(openSet);
+		return openSet;
 	};
 }
 
@@ -82,7 +82,7 @@ module.exports = {
 	describe,
 };
 
-let findNeighbors = (grid, point, end) => {
+let findNeighbors = (grid, point) => {
 	let rowAmt = grid.length - 1;
 	let colAmt = grid[0].length - 1;
 	let neighbors = [];
@@ -93,7 +93,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(topPoint)) {
 		if (topPoint.g == 0) {
 			let dir = '|';
-			topPoint = assignValues(end, topPoint, point_info, dir);
+			topPoint = assignValues(topPoint, point_info, dir);
 			neighbors.push(topPoint);
 		}
 	}
@@ -103,7 +103,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(topRightPoint)) {
 		if (topRightPoint.g == 0) {
 			let dir = '/';
-			topRightPoint = assignValues(end, topRightPoint, point_info, dir, 1.414);
+			topRightPoint = assignValues(topRightPoint, point_info, dir, 1.414);
 			neighbors.push(topRightPoint);
 		}
 	}
@@ -113,7 +113,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(rightPoint)) {
 		if (rightPoint.g == 0) {
 			let dir = '-';
-			rightPoint = assignValues(end, rightPoint, point_info, dir);
+			rightPoint = assignValues(rightPoint, point_info, dir);
 			neighbors.push(rightPoint);
 		}
 	}
@@ -123,7 +123,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(bottomRightPoint)) {
 		if (bottomRightPoint.g == 0) {
 			let dir = '\\';
-			bottomRightPoint = assignValues(end, bottomRightPoint, point_info, dir, 1.414);
+			bottomRightPoint = assignValues(bottomRightPoint, point_info, dir, 1.414);
 			neighbors.push(bottomRightPoint);
 		}
 	}
@@ -133,7 +133,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(bottomPoint)) {
 		if (bottomPoint.g == 0) {
 			let dir = '|';
-			bottomPoint = assignValues(end, bottomPoint, point_info, dir);
+			bottomPoint = assignValues(bottomPoint, point_info, dir);
 			neighbors.push(bottomPoint);
 		}
 	}
@@ -143,7 +143,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(bottomLeftPoint)) {
 		if (bottomLeftPoint.g == 0) {
 			let dir = '/';
-			bottomLeftPoint = assignValues(end, bottomLeftPoint, point_info, dir, 1.414);
+			bottomLeftPoint = assignValues(bottomLeftPoint, point_info, dir, 1.414);
 			neighbors.push(bottomLeftPoint);
 		}
 	}
@@ -153,7 +153,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(leftPoint)) {
 		if (leftPoint.g == 0) {
 			let dir = '-';
-			leftPoint = assignValues(end, leftPoint, point_info, dir);
+			leftPoint = assignValues(leftPoint, point_info, dir);
 			neighbors.push(leftPoint);
 		}
 	}
@@ -163,7 +163,7 @@ let findNeighbors = (grid, point, end) => {
 	if (isValidNeighbor(topLeftPoint)) {
 		if (topLeftPoint.g == 0) {
 			let dir = '\\';
-			topLeftPoint = assignValues(end, topLeftPoint, point_info, dir, 1.414);
+			topLeftPoint = assignValues(topLeftPoint, point_info, dir, 1.414);
 			neighbors.push(topLeftPoint);
 		}
 	}
@@ -178,29 +178,12 @@ let isValidNeighbor = point => {
 	return truth;
 };
 
-let assignValues = (end, newPoint, originalPoint, dir, d = 1) => {
+let assignValues = (newPoint, originalPoint, dir, d = 1) => {
 	newPoint.g = d * 0.9 + originalPoint.g;
-	//log(newPoint);
-	newPoint.h = heuristic(newPoint, end);
-	newPoint.f = newPoint.g + newPoint.h;
+	newPoint.f = newPoint.g;
 
 	newPoint.previous.x = originalPoint.x;
 	newPoint.previous.y = originalPoint.y;
 	newPoint.previous.dir = dir;
 	return newPoint;
-};
-
-let heuristic = (point, end) => {
-	let a = point.x - end.x;
-	let b = point.y - end.y;
-	let c = Math.sqrt(a * a + b * b);
-	return c * 0.4;
-};
-
-let sort = array => {
-	// sort by value
-	let newArray = array.sort(function(a, b) {
-		return a.f - b.f;
-	});
-	return newArray.reverse();
 };
