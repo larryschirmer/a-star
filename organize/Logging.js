@@ -23,20 +23,20 @@ let gridPrint = {
 			});
 		});
 	},
-	map: function(results) {
+	map: function(results, map) {
 		return new Promise((res, rej) => {
-			for (let i = 0; i < results.path.length; i++) {
-				let x = results.path[i][0];
-				let y = results.path[i][1];
-				results.grid.area[x][y].path = 'P';
+			for (let i = 0; i < map.length; i++) {
+				let x = map[i][0];
+				let y = map[i][1];
+				results.area[x][y].path = 'P';
 			}
 
-			results.grid.area.forEach(row => {
+			results.area.forEach(row => {
 				let cols = '';
 				for (let i = 0; i < row.length; i++) {
 					let set = `•`;
 					if (row[i].type == 'W') set = ` `;
-					if (row[i].type == 'C') set = `C`;
+					if (row[i].type == 'C') set = `•`;
 					if (row[i].path == 'P') set = `${row[i].previous.dir}`;
 					if (row[i].isStart) set = 'S';
 					if (row[i].isEnd) set = 'E';

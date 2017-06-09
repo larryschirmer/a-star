@@ -82,9 +82,41 @@ co(function*() {
 	let grid = yield getGrid(gpsFile, mapSize, geoBound);
 	gridPrint.plain(grid);
 
-	let gridResults = yield Process(grid, start, end);
+	let gridResults = yield Process(grid, start);
 
-	gridPrint.map(gridResults);
+	let route = yield getRoute(gridResults.area, end);
+
+	gridPrint.map(gridResults, route);
 }).catch(err => {
 	console.log(err);
 });
+
+let getRoute = (grid, end) => {
+	return new Promise((res, rej) => {
+		let point = grid[end.x][end.y];
+		point.isEnd = true;
+		makeMap(grid, point, []).then(map => {
+			res(map);
+		});
+	});
+};
+
+let maxRun = 1000;
+let makeMap = (grid, point, map) => {
+	return new Promise((res, rej) => {
+		if (point.isStart !== true && maxRun >= 0) {
+			map = [...map, [point.x, point.y]];
+			let nextPoint = {
+				x: point.previous.x,
+				y: point.previous.y,
+			};
+			maxRun -= 1;
+			res(makeMap(grid, grid[nextPoint.x][nextPoint.y], map));
+		} else {
+			map = [...map, [point.x, point.y]];
+			res(map.reverse());
+		}
+	}).catch(err => {
+		console.log(err);
+	});
+};
