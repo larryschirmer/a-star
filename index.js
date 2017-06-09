@@ -31,12 +31,18 @@ Procedure:
 */
 
 const mapSize = {
-	rows: 25,
+	rows: 40,
 	cols: 70,
 };
 //Set the Geo Data Boundries
-const north = 47.121800, east = 88.539000, south = 47.115226, west = 88.553000;
-const top = 1, right = 68, bottom = 23, left = 1;
+const north = 47.1218,
+	east = 88.539,
+	south = 47.115226,
+	west = 88.553;
+const top = 1,
+	right = 68,
+	bottom = 38,
+	left = 1;
 
 const geoBound = {
 	nw_n: north,
@@ -64,12 +70,12 @@ const gpsFile = [
 ];
 
 const start = {
-	x: 14,
-	y: 46,
+	x: 11,
+	y: 8,
 },
 	end = {
-		x: 13,
-		y: 36,
+		x: 11,
+		y: 25,
 	};
 
 co(function*() {
