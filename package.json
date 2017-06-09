@@ -11,8 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "co": "^4.6.0",
-    "draftlog": "^1.0.12",
-    "util": "^0.10.3"
+    "co": "^4.6.0"
   }
 }
